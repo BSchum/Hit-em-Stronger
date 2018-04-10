@@ -11,13 +11,30 @@ public class AttackScript : Scripts
         {
             player.weapon.PutWeaponDown();
         }
+
+        if (Time.time > player.spell.lastSpell + player.spell.spellDuration)
+        {
+            player.spell.StopSpell();
+
+        }
     }
-    public void Attack()
+    public void WeaponAttack()
     {
         if (Time.time > player.weapon.lastAtk + player.weapon.cooldownAtk)
         {
             player.weapon.Attack();
             player.weapon.lastAtk = Time.time;
+
+        }
+    }
+
+    public void SpellAttack()
+    {
+        if(Time.time > player.spell.lastSpell + player.spell.spellCooldown)
+        {
+            player.spell.Use();
+            player.spell.lastSpell = Time.time;
+
         }
     }
 

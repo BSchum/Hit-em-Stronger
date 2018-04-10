@@ -46,7 +46,7 @@ public class CameraManager : Singleton<CameraManager> {
 	void Update () {
 
 	    _players = GameObject.FindGameObjectsWithTag(Constants.PLAYERS_TAG);
-        if(GameManager.Instance.gameStatus == GameManager.GameState.running && PlayerManager.Instance.players.Length > 1)
+        if(GameManager.Instance.gameStatus == GameManager.GameState.running && PlayerManager.Instance.alivePlayers.Count > 1)
         {
             ComputeCameraMovement();
         }

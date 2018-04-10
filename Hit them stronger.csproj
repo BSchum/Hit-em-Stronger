@@ -231,9 +231,17 @@
     <Compile Include="Assets\Scripts\Managers\UiManager.cs" />
     <Compile Include="Assets\Scripts\Miscellenaous\Singleton.cs" />
     <Compile Include="Assets\Scripts\Miscellenaous\SupplyDepot.cs" />
-    <Compile Include="Assets\Scripts\Objects\Player.cs" />
-    <Compile Include="Assets\Scripts\Objects\Weapon.cs" />
-    <Compile Include="Assets\Scripts\Objects\WeaponBox.cs" />
+    <Compile Include="Assets\Scripts\Objects\Actors\Characters.cs" />
+    <Compile Include="Assets\Scripts\Objects\Players\Player.cs" />
+    <Compile Include="Assets\Scripts\Objects\Spell\BreathSpell.cs" />
+    <Compile Include="Assets\Scripts\Objects\Spell\LaserSpell.cs" />
+    <Compile Include="Assets\Scripts\Objects\Spell\Spell.cs" />
+    <Compile Include="Assets\Scripts\Objects\Structures\MovingPlateform.cs" />
+    <Compile Include="Assets\Scripts\Objects\UI\SelectableChar.cs" />
+    <Compile Include="Assets\Scripts\Objects\Weapon\Weapon.cs" />
+    <Compile Include="Assets\Scripts\Objects\Weapon\WeaponBox.cs" />
+    <Compile Include="Assets\Scripts\UIScene\CharacterSelect.cs" />
+    <Compile Include="Assets\Scripts\UIScene\Menu.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

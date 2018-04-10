@@ -26,13 +26,19 @@ public class MovementScript: Scripts
     bool isOnPlateform;
     bool isGrounded = true;
     bool canDoubleJump = true;
+
+
     Rigidbody2D rigidbody;
     BoxCollider2D boxCollider;
 
+    public Direction GetDirection()
+    {
+        return _currentDirection;
+    }
     public void SetPlayerDirection(Direction dir)
     {
         _currentDirection = dir;
-        this.transform.localScale = new Vector3((float)dir, 1, 1);
+        this.transform.localScale = new Vector3((float)dir*1.5f, 1.5f, 1.5f);
     }
 
     public void Move()
@@ -64,6 +70,10 @@ public class MovementScript: Scripts
         if (isOnPlateform)
         {
             boxCollider.isTrigger = true;
+        }
+        else
+        {
+            boxCollider.isTrigger = false;
         }
     }
 
@@ -118,18 +128,18 @@ public class MovementScript: Scripts
     }
 
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionStay2D(Collision2D collision)
     {
         if(collision.gameObject.tag == Constants.GROUND_TAG)
         {
             setOnGroundSetup();
         }
-
-        if (collision.gameObject.tag == Constants.PLATEFORM_TAG)
+        if (collision.gameObject.tag == Constants.PLATEFORM_TAG || collision.gameObject.tag == Constants.MOVING_PLATEFORM_TAG)
         {
             setOnPlateformSetup();
         }
     }
+
 
     private void OnCollisionExit2D(Collision2D collision)
     {
@@ -138,7 +148,7 @@ public class MovementScript: Scripts
             isGrounded = false;
         }
 
-        if (collision.gameObject.tag == Constants.PLATEFORM_TAG)
+        if (collision.gameObject.tag == Constants.PLATEFORM_TAG || collision.gameObject.tag == Constants.MOVING_PLATEFORM_TAG)
         {
             isOnPlateform = false;
         }
@@ -147,6 +157,14 @@ public class MovementScript: Scripts
     private void OnTriggerExit2D(Collider2D collision)
     {
         if(collision.gameObject.tag == Constants.PLATEFORM_TAG)
+        {
+            boxCollider.isTrigger = false;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag == Constants.GROUND_TAG)
         {
             boxCollider.isTrigger = false;
         }

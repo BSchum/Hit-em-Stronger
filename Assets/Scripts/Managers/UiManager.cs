@@ -6,35 +6,45 @@ using UnityEngine.UI;
 public class UiManager : MonoBehaviour {
     Text countText;
     GameObject endText;
+    public GameObject playerPanelPrefab;
     public GameObject healthBarPrefab;
+    public GameObject furyBarPrefab;
 	// Use this for initialization
 	void Start () {
         countText = GameObject.Find(Constants.COUNT_TEXT_NAME).GetComponent<Text>();
         endText = GameObject.Find(Constants.END_TEXT_NAME);
         endText.SetActive(false);
-
-        Debug.Log(PlayerManager.Instance.numberPlayerToSpawn);
-
-        foreach(GameObject player in PlayerManager.Instance.players)
+        foreach(Player player in PlayerManager.Instance.alivePlayers)
         {
-            GameObject healthbar = Instantiate(healthBarPrefab, GameObject.Find(Constants.HEALTH_BAR_GRID_PANEL_NAME).transform);
-            Slider healthSlider = healthbar.GetComponent<Slider>();
-            Text nameText = healthSlider.gameObject.GetComponentInChildren<Text>();
-            Debug.Log(player.GetComponent<Player>().status);
-            nameText.text = Constants.TITLE_HEALTH_BAR + player.GetComponent<Player>().playerNumber;
-            healthSlider.gameObject.name = Constants.TITLE_HEALTH_BAR + player.GetComponent<Player>().playerNumber;
+            GameObject playerPanel = Instantiate(playerPanelPrefab, GameObject.Find(Constants.HEALTH_BAR_GRID_PANEL_NAME).transform);
+            GameObject healthBar = Instantiate(healthBarPrefab, playerPanel.transform);
+            GameObject furyBar = Instantiate(furyBarPrefab, playerPanel.transform);
+
+            furyBar.name = Constants.TITLE_FURY_BAR + player.playerNumber;
+            healthBar.name = Constants.TITLE_HEALTH_BAR + player.playerNumber;
+
+            Slider healthSlider = healthBar.GetComponentInChildren<Slider>();
+            Slider furySlider = furyBar.GetComponentInChildren<Slider>();
+
+            Text nameText = playerPanel.GetComponentInChildren<Text>();
+            nameText.text = Constants.LABEL_PANEL + player.playerNumber;
+
+            playerPanel.gameObject.name = Constants.TITLE_PANEL_BAR + player.playerNumber;
         }
     }
 	
 	// Update is called once per frame
 	void Update () {
 
-        foreach(GameObject player in PlayerManager.Instance.players)
+        foreach(Player player in PlayerManager.Instance.alivePlayers)
         {
-            Player playerAttachedTo = player.GetComponent<Player>();
-            GameObject healthbar = GameObject.Find(Constants.TITLE_HEALTH_BAR + playerAttachedTo.playerNumber);
+            Characters playerCharacter = player.charInstantiated.GetComponent<Characters>();
+            GameObject healthbar = GameObject.Find(Constants.TITLE_HEALTH_BAR + player.playerNumber);
+            GameObject furyBar = GameObject.Find(Constants.TITLE_FURY_BAR + player.playerNumber);
             Slider healthSlider = healthbar.GetComponent<Slider>();
-            healthSlider.value = playerAttachedTo.health;
+            Slider furySlider = furyBar.GetComponent<Slider>();
+            healthSlider.value = playerCharacter.health;
+            furySlider.value = playerCharacter.fury;
         }
         if(GameManager.Instance.gameStatus == GameManager.GameState.starting)
         {

@@ -1,32 +1,45 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerManager : Singleton<PlayerManager> {
-    public GameObject[] players { get; private set; }
+    SupplyDepot sp;
+    public GameObject[] currentPlayers { get; private set; }
     public GameObject parent;
-    public GameObject playerPrefab;
-    public int numberPlayerToSpawn;
+    public GameObject firePrefab;
+    public GameObject icePrefab;
+    public Player[] allPlayers;
+    public List<Player> alivePlayers;
 	// Use this for initialization
 	void Start () {
-        numberPlayerToSpawn = SupplyDepot.playerNumber;
+        allPlayers = SupplyDepot.players;
+        alivePlayers = SupplyDepot.players.ToList();
         SpawnPlayers();
-        players = GameObject.FindGameObjectsWithTag(Constants.PLAYERS_TAG);
-
+        
     }
 
     // Update is called once per frame
-    void FixedUpdate () {
-        players = GameObject.FindGameObjectsWithTag(Constants.PLAYERS_TAG);
+    void Update () {
+        foreach(Player p in allPlayers)
+        {
+            if(p.charInstantiated == null)
+            {
+                alivePlayers.Remove(p);
+            }
+        }
     }
 
     void SpawnPlayers()
     {
         GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag(Constants.SPAWNPOINT_TAG);
         List<int> spawnsIndexes = ChooseSpawnPoint(spawnPoints);
-        foreach(int spawnIndex in spawnsIndexes)
+        int i = 0;
+        foreach (int spawnIndex in spawnsIndexes)
         {
-            Instantiate(playerPrefab, spawnPoints[spawnIndex].transform.position, new Quaternion(0, 0, 0, 0), parent.transform);
+            allPlayers[i].SpawnPlayerChar(spawnPoints[spawnIndex].transform.position, parent.transform);
+            
+            i++;
         }
     }
 
@@ -36,7 +49,7 @@ public class PlayerManager : Singleton<PlayerManager> {
         List<int> spawnChoosed = new List<int>();
         spawnChoosed.Add(Random.Range(0, spawnPoints.Length));
         int randomIndex = 0;
-        while (playerSpawned < numberPlayerToSpawn)
+        while (playerSpawned < allPlayers.Length)
         {
             do
             {

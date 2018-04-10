@@ -4,10 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class InputManager : Singleton<InputManager> {
-    /*
-     * This class is meant to control input and call right things
-     */
-    
 	// Use this for initialization
 	void Start () {
 		
@@ -15,19 +11,21 @@ public class InputManager : Singleton<InputManager> {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-        foreach (GameObject player in PlayerManager.Instance.players)
+        foreach (Player player in PlayerManager.instance.alivePlayers)
         {
-            if(player.GetComponent<Player>().status == Player.State.ready)
+            if(player.charInstantiated && player.charInstantiated.GetComponent<Characters>().status == Characters.State.ready)
             {
-                int playerNumber = player.GetComponent<Player>().playerNumber;
-                MovementScript playerMvmt = player.GetComponent<MovementScript>();
-                AttackScript playerAtk = player.GetComponent<AttackScript>();
+                int playerNumber = player.playerNumber;
+                MovementScript playerMvmt = player.charInstantiated.GetComponent<MovementScript>();
+                AttackScript playerAtk = player.charInstantiated.GetComponent<AttackScript>();
+
                 float horizontal = Input.GetAxisRaw(Constants.PLAYERS_HORIZONTAL_INPUT + playerNumber);
 
                 playerMvmt.SetMovementAndDirectionState(horizontal);
                 CheckJumpButton(playerNumber, playerMvmt);
                 CheckFallOffButton(playerNumber, playerMvmt);
                 CheckAttackButton(playerNumber, playerAtk);
+                CheckSpellButton(playerNumber, playerAtk);
             }
         }
     }
@@ -36,7 +34,7 @@ public class InputManager : Singleton<InputManager> {
     {
         if(Input.GetButton(Constants.PLAYER_ATTACK_INPUT + playerNumber))
         {
-            playerAtk.Attack();
+            playerAtk.WeaponAttack();
         }
     }
 
@@ -53,6 +51,14 @@ public class InputManager : Singleton<InputManager> {
         if (Input.GetButtonDown(Constants.PLAYER_FALLOFF_INPUT + playerNumber))
         {
             playerMvmt.Fall();
+        }
+    }
+
+    void CheckSpellButton(int playerNumber, AttackScript playerAtk)
+    {
+        if(Input.GetButtonDown(Constants.PLAYER_SPELL_INPUT + playerNumber))
+        {
+            playerAtk.SpellAttack();
         }
     }
 }

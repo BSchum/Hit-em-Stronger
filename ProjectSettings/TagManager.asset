@@ -8,6 +8,7 @@ TagManager:
   - Plateform
   - Spawn
   - Weapon
+  - MovingPlateform
   layers:
   - Default
   - TransparentFX
@@ -44,4 +45,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: foreground
+    uniqueID: 681852915
     locked: 0
